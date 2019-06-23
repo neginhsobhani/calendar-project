@@ -10,18 +10,17 @@ struct task{
     int endTime;
     struct task *next;
 };
-//struct task *week[7];
 ////////function prototypes
 struct task* create_node();
-void add_node(struct task **taskList, struct task *new_task);
-void addTask(struct task ***taskList);
+void add_node(struct task *taskList, struct task *new_task);
+void addTask(struct task *taskList[]);
 ////////main
 int main() {
-    struct task **week[7];
+    struct task *week[7];
     for(int i=0;i<7;i++){
-        struct task *list=(struct task *)malloc(sizeof(struct task));
-        week[i]=&list;
-        list->next=NULL;
+        week[i]=(struct task *)malloc(sizeof(struct task));
+        week[i]->next=NULL;
+
     }
     addTask(week);
     return 0;
@@ -36,21 +35,22 @@ struct task* create_node(){ //creates one task
     scanf("%d",&newtask->endTime);
             return newtask;
 }
-void add_node(struct task **taskList, struct task *new_task){
-    struct task **current=taskList;
-        while((**current).next!=NULL){
-            (*current)=(**current).next;
-        }
-    new_task->next = (**current).next;
-    (**current).next = new_task;
+void add_node(struct task *taskList, struct task *new_task){
+    struct task *current=taskList;
+    while(current->next!=NULL){
+        current=current->next;
+    }
+    new_task->next = current->next;
+    current->next = new_task;
 }
-void addTask(struct task ***week) {
+void addTask(struct task *week[]) {
     int day;
     printf("Enter the day\n");
     scanf("%d",&day);
     struct task *new_node = create_node();
     add_node(week[day],new_node);
 }
+
 
 
 
