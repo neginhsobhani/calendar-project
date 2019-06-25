@@ -21,6 +21,7 @@ int checkTaskName(struct task *week[],int day, struct task *new_task);
 void showTask(struct task *week[]);
 void showDay(struct task *week[],int day);
 
+
 ////////main
 
 int main() {
@@ -78,8 +79,8 @@ void addTask(struct task *week[]) {
 int checkTaskTime(struct task *week[],int day,struct task *new_task){
     struct task *current=week[day];
         while (current != NULL) {
-            if (((current->startTime <= new_task->startTime) && (new_task->startTime <= current->endTime)) ||
-                ((new_task->startTime <= current->startTime) && (current->startTime <= new_task->endTime))) {
+            if (((current->startTime < new_task->startTime) && (new_task->startTime < current->endTime)) ||
+                ((new_task->startTime < current->startTime) && (current->startTime < new_task->endTime))) {
                 return 1;
             }
             current = current->next;
@@ -129,8 +130,6 @@ void showDay(struct task *week[],int day){
             current = current->next;
         }
  }
-
-
 
 
 
