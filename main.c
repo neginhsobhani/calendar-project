@@ -18,7 +18,8 @@ void add_node(struct task *taskList, struct task *new_task);
 void addTask(struct task *week[]);
 int checkTaskTime(struct task *week[],int day,struct task *new_task);
 int checkTaskName(struct task *week[],int day, struct task *new_task);
-
+void showTask(struct task *week[]);
+void showDay(struct task *week[],int day);
 
 ////////main
 
@@ -30,8 +31,8 @@ int main() {
 
     }
     while(1) {
-        printf("hello\n");
         addTask(week);
+        showTask(week);
     }
     return 0;
 }
@@ -76,24 +77,59 @@ void addTask(struct task *week[]) {
 }
 int checkTaskTime(struct task *week[],int day,struct task *new_task){
     struct task *current=week[day];
-        while(current!=NULL){
-            if(current->startTime < new_task->startTime < current->endTime || new_task->startTime < current->startTime < new_task->endTime){
+        while (current != NULL) {
+            if (((current->startTime <= new_task->startTime) && (new_task->startTime <= current->endTime)) ||
+                ((new_task->startTime <= current->startTime) && (current->startTime <= new_task->endTime))) {
                 return 1;
             }
-            current=current->next;
+            current = current->next;
         }
         return 0;
-}
+    }
+
 int checkTaskName(struct task *week[],int day, struct task *new_task){
     struct task *current=week[day];
-    while(current!=NULL){
-        if(strcmp(week[day]->taskName,new_task->taskName)==0){
-            return 1;
+        while (current != NULL) {
+            if (strcmp(current->taskName, new_task->taskName) == 0) {
+                return 1;
+            }
+            current = current->next;
         }
-        current=current->next;
+        return 0;
     }
-    return 0;
+void showTask(struct task *week[]){
+    printf("0 (Saturday):");
+    showDay(week,0);
+    printf("\n");
+    printf("1 (Sunday): ");
+    showDay(week,1);
+    printf("\n");
+    printf("2 (Monday): ");
+    showDay(week,2);
+    printf("\n");
+    printf("3 (Tuesday): ");
+    showDay(week,3);
+    printf("\n");
+    printf("4 (Wednesday): ");
+    showDay(week,4);
+    printf("\n");
+    printf("5 (Thursday): ");
+    showDay(week,5);
+    printf("\n");
+    printf("6 (Friday): ");
+    showDay(week,6);
+    printf("\n");
+
+
 }
+void showDay(struct task *week[],int day){
+        struct task *current = week[day]->next;
+        while(current!=NULL) {
+            printf("%s (From: %d,To: %d)", current->taskName, current->startTime, current->endTime);
+            current = current->next;
+        }
+ }
+
 
 
 
