@@ -27,6 +27,8 @@ struct task *create_node_lode(struct task node);
 struct task **load(struct task *loaded_week[]);
 void delete_node(struct task *week[],struct task *deleted,int day);
 void delete(struct task *week[]);
+void modify_node(struct task *week[],struct task *new_task,int day);
+struct task *theModify(struct task *week[]);
 
 ////////main
 
@@ -43,20 +45,22 @@ int main() {
     gets(userName);
     printf("Welcome %s\n",&userName);
     while (1) {
-        printf("[1] new task\n[2] delete task\n[3] show task\n[4] save\n[5] load\n[6] quit\n");
+        printf("[1] new task\n[2] delete task\n[3] modify\n[4] show task\n[5] save\n[6] load\n[7] quit\n");
         char key = getch();
         getch();
         if (key == '1') {
             addTask(week);
         } else if (key == '2') {
             delete(week);
-        } else if (key == '3') {
+        }else if(key == '3'){
+            theModify(week);
+        }else if (key == '4') {
             showTask(week);
-        } else if (key == '4') {
-            save(week);
         } else if (key == '5') {
+            save(week);
+        } else if (key == '6') {
             week = load(week);
-        }else if(key == '6') {
+        }else if(key == '7') {
             printf("Bye %s\n",userName);
             break;
         }
@@ -95,9 +99,9 @@ void addTask(struct task *week[]) {
         int name = checkTaskName(week, day, new_node);
         if (time == 1) {
             printf("Conflict with time\n");
-        } else if (name == 1) {
+        } if (name == 1) {
             printf("Conflict with name\n");
-        } else {
+        }else {
             add_node(week[day], new_node);
             printf("There is no error and the new task is created\n");
         }
@@ -260,3 +264,44 @@ void delete(struct task *week[]){
         printf("No task exists in this day\n");
     }
 }
+
+void modify_node(struct task *week[],struct task *new_task,int day){
+    struct task *current=week[day];
+    while(current!=new_task){
+        current=current->next;
+    }
+    struct task *modified=new_task;
+    printf("Enter the new information\n");
+    printf("Enter the name of the task\n");
+    scanf("%s",modified->taskName);
+    printf("Enter the start time of the task\n");
+    scanf("%d",&modified->startTime);
+    printf("Enter the end time of the task\n");
+    scanf("%d",&modified->endTime);
+
+}
+
+struct task *theModify(struct task *week[]){
+    int day;
+    char name[50];
+    printf("Enter the DAY of the task you want to modify\n");
+    scanf("%d",&day);
+    printf("Enter the NAME of the task you want to modify\n");
+    scanf("%s",name);
+    struct task *current=week[day]->next;
+        if(week[day]->next!=NULL){
+            while(current!=NULL) {
+                if (strncmp(current->taskName, name, strlen(name)) == 0) {
+                    struct task *new_task = current;
+                    modify_node(week, new_task, day);
+                    printf("Task was modified\n");
+                    return NULL;
+                }
+                current = current->next;
+            }
+            printf("This task does not exist in this day\n");
+        }else{
+            printf("There is no task in this day\n");
+        }
+}
+
