@@ -17,22 +17,16 @@ struct task {
 struct task *create_node();
 
 void add_node(struct task *taskList, struct task *new_task);
-
 void addTask(struct task *week[]);
-
 int checkTaskTime(struct task *week[], int day, struct task *new_task);
-
 int checkTaskName(struct task *week[], int day, struct task *new_task);
-
 void showTask(struct task *week[]);
-
 void showDay(struct task *week[], int day);
-
 void save(struct task *week[]);
-
 struct task *create_node_lode(struct task node);
-
 struct task **load(struct task *loaded_week[]);
+void delete_node(struct task *week[],struct task *deleted,int day);
+void delete(struct task *week[]);
 
 ////////main
 
@@ -44,19 +38,26 @@ int main() {
         week[i]->next = NULL;
         week[i]->isHead = 1;
     }
+    char userName[20];
+    printf("Enter your name\n");
+    gets(userName);
+    printf("Welcome %s\n",&userName);
     while (1) {
-        printf("[1] new task\n[2] show task\n[3] save\n[4] load\n[5] quit\n");
+        printf("[1] new task\n[2] delete task\n[3] show task\n[4] save\n[5] load\n[6] quit\n");
         char key = getch();
         getch();
         if (key == '1') {
             addTask(week);
         } else if (key == '2') {
-            showTask(week);
+            delete(week);
         } else if (key == '3') {
-            save(week);
+            showTask(week);
         } else if (key == '4') {
-            week = load(week);
+            save(week);
         } else if (key == '5') {
+            week = load(week);
+        }else if(key == '6') {
+            printf("Bye %s\n",userName);
             break;
         }
     }
@@ -92,7 +93,6 @@ void addTask(struct task *week[]) {
     if (week[day]->next != NULL) {
         int time = checkTaskTime(week, day, new_node);
         int name = checkTaskName(week, day, new_node);
-        printf("%d", time);
         if (time == 1) {
             printf("Conflict with time\n");
         } else if (name == 1) {
@@ -111,7 +111,8 @@ int checkTaskTime(struct task *week[], int day, struct task *new_task) {
     struct task *current = week[day];
     while (current != NULL) {
         if (((current->startTime < new_task->startTime) && (new_task->startTime < current->endTime)) ||
-            ((new_task->startTime <= current->startTime) && (current->startTime < new_task->endTime))) {
+            ((new_task->startTime <= current->startTime) && (current->startTime < new_task->endTime)) ||
+                (current->startTime==new_task->startTime && current->endTime==new_task->endTime)) {
             return 1;
         }
         current = current->next;
@@ -156,10 +157,13 @@ void showTask(struct task *week[]) {
 
 }
 
-void showDay(struct task *week[], int day) {
+void showDay(struct task *week[], int day) { //shows each task
     struct task *current = week[day]->next;
     while (current != NULL) {
         printf("%s (From: %d,To: %d)", current->taskName, current->startTime, current->endTime);
+        if(current->next!=NULL){
+            printf(" -> ");
+        }
         current = current->next;
     }
 }
@@ -223,4 +227,36 @@ struct task **load(struct task *loaded_week[7]) {
     printf("Data Was Loaded\n");
     fclose(fpload);
     return loaded_week;
+}
+
+void delete_node(struct task *week[],struct task *deleted,int day){
+   struct task *current=week[day];
+   while(current->next!=deleted){
+       current=current->next;
+   }
+   struct task * temp=deleted->next;
+   free(deleted);
+   current->next=temp;
+}
+void delete(struct task *week[]){
+    int day;
+    char name[50];
+    printf("Enter the day of the task you want to delete\n ");
+    scanf("%d",&day);
+    printf("Enter the name of the task you want to delete\n");
+    scanf("%s",name);
+    struct task *current=week[day]->next;
+    if(week[day]->next!=NULL) {
+        while (current != NULL) {
+            if (strncmp(current->taskName, name, strlen(name)) == 0) {
+                delete_node(week, current, day);
+                printf("Task was deleted\n");
+                return;
+            }
+            current=current->next;
+        }
+        printf("This task does not exist in this day\n");
+    }else {
+        printf("No task exists in this day\n");
+    }
 }
