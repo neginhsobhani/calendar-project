@@ -42,6 +42,10 @@ void modify_node(struct task *week[],struct task *new_task,int day);
 
 struct task *theModify(struct task *week[]);
 
+void add_node_order(struct task *taskList,struct task *next_task,struct task *new_task);
+
+void add_timeOrder(struct task *week[],struct task *new_task,int day);
+
 ////////main
 
 int main() {
@@ -114,11 +118,11 @@ void addTask(struct task *week[]) {
         }else if (name == 1) {
             printf("Conflict with name\n");
         }else{
-            add_node(week[day], new_node);
+            add_timeOrder(week,new_node,day);
             printf("There is no error and the new task is created\n");
         }
     } else {
-        add_node(week[day], new_node);
+       add_timeOrder(week,new_node,day);
         printf("There is no error and the new task is created\n");
     }
 }
@@ -254,6 +258,7 @@ void delete_node(struct task *week[],struct task *deleted,int day){
    free(deleted);
    current->next=temp;
 }
+
 void delete(struct task *week[]){
     int day;
     char name[50];
@@ -314,6 +319,32 @@ struct task *theModify(struct task *week[]){
             printf("This task does not exist in this day\n");
         }else{
             printf("There is no task in this day\n");
+        }
+}
+
+void add_node_order(struct task *taskList,struct task *greater,struct task *new_task){
+    struct task *current=taskList;
+        while(current->next!=greater){
+            current=current->next;
+        }
+        new_task->next=current->next;
+        current->next=new_task;
+}
+
+void add_timeOrder(struct task *week[],struct task *new_task,int day){
+    struct task *current=week[day]->next;
+        if(week[day]->next!=NULL){
+            while(current!=NULL){
+                if(new_task->startTime < current->startTime){
+                    add_node_order(week[day],current,new_task);
+                    return;
+                }else{
+                    current=current->next;
+                }
+            }
+            add_node(week[day], new_task);
+        }else{
+            add_node(week[day], new_task);
         }
 }
 
