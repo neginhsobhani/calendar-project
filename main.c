@@ -17,17 +17,29 @@ struct task {
 struct task *create_node();
 
 void add_node(struct task *taskList, struct task *new_task);
+
 void addTask(struct task *week[]);
+
 int checkTaskTime(struct task *week[], int day, struct task *new_task);
+
 int checkTaskName(struct task *week[], int day, struct task *new_task);
+
 void showTask(struct task *week[]);
+
 void showDay(struct task *week[], int day);
-void save(struct task *week[]);
+
+void save(struct task *week[], char*name);
+
 struct task *create_node_lode(struct task node);
-struct task **load(struct task *loaded_week[]);
+
+struct task **load(struct task *loaded_week[],char *name);
+
 void delete_node(struct task *week[],struct task *deleted,int day);
+
 void delete(struct task *week[]);
+
 void modify_node(struct task *week[],struct task *new_task,int day);
+
 struct task *theModify(struct task *week[]);
 
 ////////main
@@ -43,7 +55,7 @@ int main() {
     char userName[20];
     printf("Enter your name\n");
     gets(userName);
-    printf("Welcome %s\n",&userName);
+    printf("Welcome %s\n",userName);
     while (1) {
         printf("[1] new task\n[2] delete task\n[3] modify\n[4] show task\n[5] save\n[6] load\n[7] quit\n");
         char key = getch();
@@ -57,9 +69,9 @@ int main() {
         }else if (key == '4') {
             showTask(week);
         } else if (key == '5') {
-            save(week);
+            save(week,userName);
         } else if (key == '6') {
-            week = load(week);
+            week = load(week,userName);
         }else if(key == '7') {
             printf("Bye %s\n",userName);
             break;
@@ -99,9 +111,9 @@ void addTask(struct task *week[]) {
         int name = checkTaskName(week, day, new_node);
         if (time == 1) {
             printf("Conflict with time\n");
-        } if (name == 1) {
+        }else if (name == 1) {
             printf("Conflict with name\n");
-        }else {
+        }else{
             add_node(week[day], new_node);
             printf("There is no error and the new task is created\n");
         }
@@ -172,8 +184,8 @@ void showDay(struct task *week[], int day) { //shows each task
     }
 }
 
-void save(struct task *week[]) {
-    FILE *fpsave = fopen(".\\save.bin", "wb");
+void save(struct task *week[], char*name) {
+    FILE *fpsave = fopen(name, "wb");
     if (fpsave == NULL) {
         printf("Can not open file\n");
         return;
@@ -199,8 +211,8 @@ struct task *create_node_lode(struct task node) {
     return nn;
 }
 
-struct task **load(struct task *loaded_week[7]) {
-    FILE *fpload = fopen(".\\save.bin", "rb");
+struct task **load(struct task *loaded_week[7],char *name) {
+    FILE *fpload = fopen(name,"rb");
     if (fpload == NULL) {
         printf("Can not open file\n");
         return NULL;
