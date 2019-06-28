@@ -189,7 +189,10 @@ void showDay(struct task *week[], int day) { //shows each task
 }
 
 void save(struct task *week[], char*name) {
-    FILE *fpsave = fopen(name, "wb");
+    char out[150]=".\\";
+    strcat(out,name);
+    strcat(out,".bin");
+    FILE *fpsave = fopen(out, "wb");
     if (fpsave == NULL) {
         printf("Can not open file\n");
         return;
@@ -216,7 +219,10 @@ struct task *create_node_lode(struct task node) {
 }
 
 struct task **load(struct task *loaded_week[7],char *name) {
-    FILE *fpload = fopen(name,"rb");
+    char out[150]=".\\";
+    strcat(out,name);
+    strcat(out,".bin");
+    FILE *fpload = fopen(out,"rb");
     if (fpload == NULL) {
         printf("Can not open file\n");
         return NULL;
@@ -243,6 +249,7 @@ struct task **load(struct task *loaded_week[7],char *name) {
         list->next = NULL;
         list->isHead = 1;
         loaded_week[i] = list;
+        i++;
     }
     printf("Data Was Loaded\n");
     fclose(fpload);
@@ -347,4 +354,5 @@ void add_timeOrder(struct task *week[],struct task *new_task,int day){
             add_node(week[day], new_task);
         }
 }
+
 
