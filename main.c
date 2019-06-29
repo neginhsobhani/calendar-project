@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <conio.h>
-#include <stdbool.h>
+#include <ctype.h>
 
 struct task {
     int isHead;
@@ -46,6 +46,8 @@ void add_node_order(struct task *taskList,struct task *next_task,struct task *ne
 
 void add_timeOrder(struct task *week[],struct task *new_task,int day);
 
+void search(struct task *week[]);
+
 ////////main
 
 int main() {
@@ -61,22 +63,24 @@ int main() {
     gets(userName);
     printf("Welcome %s\n",userName);
     while (1) {
-        printf("[1] new task\n[2] delete task\n[3] modify\n[4] show task\n[5] save\n[6] load\n[7] quit\n");
+        printf("[1] new task\n[2] delete task\n[3] search\n[4] modify\n[5] show task\n[6] save\n[7] load\n[8] quit\n");
         char key = getch();
         getch();
         if (key == '1') {
             addTask(week);
         } else if (key == '2') {
             delete(week);
-        }else if(key == '3'){
+        }else if(key =='3') {
+            search(week);
+        }else if(key == '4'){
             theModify(week);
-        }else if (key == '4') {
+        }else if (key == '5') {
             showTask(week);
-        } else if (key == '5') {
-            save(week,userName);
         } else if (key == '6') {
+            save(week,userName);
+        } else if (key == '7') {
             week = load(week,userName);
-        }else if(key == '7') {
+        }else if(key == '8') {
             printf("Bye %s\n",userName);
             break;
         }
@@ -231,7 +235,7 @@ struct task **load(struct task *loaded_week[7],char *name) {
     }
     int i = 0;
     struct task *current;
-    while (true) {
+    while (1) {
         struct task *load = (struct task *) malloc(sizeof(struct task));
         fread(load, sizeof(struct task), 1, fpload);
         if (feof(fpload)) {
@@ -356,5 +360,25 @@ void add_timeOrder(struct task *week[],struct task *new_task,int day){
             add_node(week[day], new_task);
         }
 }
+
+void search(struct task *week[]){
+    int found=0;
+        char name[50];
+        printf("Enter the name of the task\n");
+        scanf("%s",name);
+        for(int i=0;i<7;i++){
+            struct task *current=week[i]->next;
+            if(week[i]->next!=NULL){
+                while(current!=NULL){
+                    if(strcmp(name,current->taskName)==0){
+                        printf("\nDay: %d-From %d,To %d\n",i,current->startTime,current->endTime);
+                        found++;
+                    }current=current->next;
+                }
+            }
+        }if(found==0) {
+        printf("This task does not exist in this week\n");
+    }
+    }
 
 
