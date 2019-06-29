@@ -141,18 +141,28 @@ void addTask(struct task *week[]) {
         int time = checkTaskTime(week, day, new_node);
         int name = checkTaskName(week, day, new_node);
         if (time == 1 && name==1) {
-            printf("Conflict with both time and name !!\n");
+            printf(" -------------------------------------\n");
+            printf("| Conflict with both time and name !! |\n");
+            printf(" -------------------------------------\n");
         }else if (name == 1) {
-            printf("Conflict with name\n");
+            printf(" --------------------\n");
+            printf("| Conflict with name |\n");
+            printf(" --------------------\n");
         }else if (time==1){
-           printf("Conflict with time\n");
+            printf(" --------------------\n");
+            printf("| Conflict with time |\n");
+            printf(" --------------------\n");
         }else{
             add_timeOrder(week,new_node,day);
-            printf("There is no error and the new task is created\n");
+            printf(" -----------------------------------------------\n");
+            printf("| There is no error and the new task is created |\n");
+            printf(" -----------------------------------------------\n");
         }
     } else {
        add_timeOrder(week,new_node,day);
-        printf("There is no error and the new task is created\n");
+        printf(" -----------------------------------------------\n");
+        printf("| There is no error and the new task is created |\n");
+        printf(" -----------------------------------------------\n");
     }
 }
 
