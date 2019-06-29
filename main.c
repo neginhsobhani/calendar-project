@@ -48,6 +48,8 @@ void add_timeOrder(struct task *week[],struct task *new_task,int day);
 
 void search(struct task *week[]);
 
+void showInstruction();
+
 ////////main
 
 int main() {
@@ -59,29 +61,42 @@ int main() {
         week[i]->isHead = 1;
     }
     char userName[20];
-    printf("Enter your name\n");
+    printf(" ---------------\n");
+    printf("|               |\n");
+    printf("|Enter your name|\n");
+    printf("|               |\n");
+    printf(" ---------------\n");
     gets(userName);
-    printf("Welcome %s\n",userName);
+    printf(" -------------------------------\n");
+    printf("|                                     \n");
+    printf("|       Welcome %s           \n",userName);
+    printf("|                                     \n");;
+    printf(" -------------------------------\n");
     while (1) {
-        printf("[1] new task\n[2] delete task\n[3] search\n[4] modify\n[5] show task\n[6] save\n[7] load\n[8] quit\n");
+        printf("[1] Instruction\n[2] new task\n[3] delete task\n[4] search\n[5] modify\n[6] show task\n[7] save\n[8] load\n[9] quit\n");
         char key = getch();
-        getch();
-        if (key == '1') {
+        getch();if(key == '1'){
+            showInstruction();
+        }else if (key == '2') {
             addTask(week);
-        } else if (key == '2') {
+        } else if (key == '3') {
             delete(week);
-        }else if(key =='3') {
+        }else if(key =='4') {
             search(week);
-        }else if(key == '4'){
+        }else if(key == '5'){
             theModify(week);
-        }else if (key == '5') {
+        }else if (key == '6') {
             showTask(week);
-        } else if (key == '6') {
-            save(week,userName);
         } else if (key == '7') {
+            save(week,userName);
+        } else if (key == '8') {
             week = load(week,userName);
-        }else if(key == '8') {
-            printf("Bye %s\n",userName);
+        }else if(key == '9') {
+            printf(" --------------------------\n");
+            printf("|                                     \n");
+            printf("|       Bye %s           \n",userName);
+            printf("|                                     \n");;
+            printf(" --------------------------\n");
             break;
         }
     }
@@ -91,11 +106,17 @@ int main() {
 struct task *create_node() { //creates one task
     struct task *newtask = (struct task *) malloc(sizeof(struct task));
     newtask->isHead = 0;
-    printf("Enter the name of the task\n");
+    printf(" ----------------------------\n");
+    printf("| Enter the name of the task |\n");
+    printf(" ----------------------------\n");
     scanf("%s", newtask->taskName);
-    printf("Enter the start time\n");
+    printf(" ----------------------\n");
+    printf("| Enter the start time |\n");
+    printf(" ----------------------\n");
     scanf("%d", &newtask->startTime);
-    printf("Enter the end time\n");
+    printf(" --------------------\n");
+    printf("| Enter the end time |\n");
+    printf(" --------------------\n");
     scanf("%d", &newtask->endTime);
     return newtask;
 }
@@ -111,7 +132,9 @@ void add_node(struct task *taskList, struct task *new_task) {
 
 void addTask(struct task *week[]) {
     int day;
-    printf("Enter the day\n");
+    printf(" ---------------\n");
+    printf("| Enter the day |\n");
+    printf(" ---------------\n");
     scanf("%d", &day);
     struct task *new_node = create_node();
     if (week[day]->next != NULL) {
@@ -380,5 +403,25 @@ void search(struct task *week[]){
         printf("This task does not exist in this week\n");
     }
     }
+
+void showInstruction(){
+    printf("Here is a small guid to this calendar\n\n");
+    printf("NEW TASK lets you add new task to your weekly tasks\n");
+    printf("You need to enter day,name,start time and the end time of the task\n");
+    printf("DELETE lets you delete any of your tasks\n");
+    printf("You need to enter the day and the name of the task\n");
+    printf("SEARCH lets you find the days and the hours of a specific task\n");
+    printf("You need to enter the name of the task \n");
+    printf("MODIFY lets you change the name or the time of a task\n");
+    printf("You need to enter the name,start time and the end time of the task\n");
+    printf("SHOW TASK shows you all of the task in the week\n");
+    printf("SAVE lets you save the changes you have made to your weekly tasks\n");
+    printf("Remember to save changes before quiting the program\n");
+    printf("LOAD helps you load the file that was saved with your name\n");
+    printf("If you want to make any changes to your own weekly planner\n");
+    printf("please first choose load option\n");
+    printf("If you save changes to your file without loading it\n");
+    printf("The last data will be removed,BE CAREFUL!\n");
+}
 
 
