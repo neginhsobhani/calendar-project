@@ -62,16 +62,12 @@ int main() {
     }
     char userName[20];
     printf(" ---------------\n");
-    printf("|               |\n");
     printf("|Enter your name|\n");
-    printf("|               |\n");
     printf(" ---------------\n");
     gets(userName);
-    printf(" -------------------------------\n");
-    printf("|                                     \n");
-    printf("|       Welcome %s           \n",userName);
-    printf("|                                     \n");;
-    printf(" -------------------------------\n");
+    printf(" -----------------------------\n");
+    printf("       Welcome %s           \n",userName);
+    printf(" -----------------------------\n");
     while (1) {
         printf("[1] Instruction\n[2] new task\n[3] delete task\n[4] search\n[5] modify\n[6] show task\n[7] save\n[8] load\n[9] quit\n");
         char key = getch();
@@ -93,9 +89,7 @@ int main() {
             week = load(week,userName);
         }else if(key == '9') {
             printf(" --------------------------\n");
-            printf("|                                     \n");
-            printf("|       Bye %s           \n",userName);
-            printf("|                                     \n");;
+            printf("       Bye %s           \n",userName);
             printf(" --------------------------\n");
             break;
         }
@@ -143,26 +137,26 @@ void addTask(struct task *week[]) {
         if (time == 1 && name==1) {
             printf(" -------------------------------------\n");
             printf("| Conflict with both time and name !! |\n");
-            printf(" -------------------------------------\n");
+            printf(" -------------------------------------\n\n");
         }else if (name == 1) {
             printf(" --------------------\n");
             printf("| Conflict with name |\n");
-            printf(" --------------------\n");
+            printf(" --------------------\n\n");
         }else if (time==1){
             printf(" --------------------\n");
             printf("| Conflict with time |\n");
-            printf(" --------------------\n");
+            printf(" --------------------\n\n");
         }else{
             add_timeOrder(week,new_node,day);
             printf(" -----------------------------------------------\n");
             printf("| There is no error and the new task is created |\n");
-            printf(" -----------------------------------------------\n");
+            printf(" -----------------------------------------------\n\n");
         }
     } else {
        add_timeOrder(week,new_node,day);
         printf(" -----------------------------------------------\n");
         printf("| There is no error and the new task is created |\n");
-        printf(" -----------------------------------------------\n");
+        printf(" -----------------------------------------------\n\n");
     }
 }
 
@@ -233,7 +227,9 @@ void save(struct task *week[], char*name) {
     strcat(out,".bin");
     FILE *fpsave = fopen(out, "wb");
     if (fpsave == NULL) {
-        printf("Can not open file\n");
+        printf(" -------------------\n");
+        printf("| Can not open file |\n");
+        printf(" -------------------\n\n");
         return;
     }
     for (int i = 0; i < 7; i++) {
@@ -243,7 +239,9 @@ void save(struct task *week[], char*name) {
             current = current->next;
         }
     }
-    printf("Changes were saved\n");
+    printf(" --------------------\n");
+    printf("| Changes were saved |\n");
+    printf(" --------------------\n\n");
     fclose(fpsave);
 }
 
@@ -263,7 +261,9 @@ struct task **load(struct task *loaded_week[7],char *name) {
     strcat(out,".bin");
     FILE *fpload = fopen(out,"rb");
     if (fpload == NULL) {
-        printf("Can not open file\n");
+        printf(" -------------------\n");
+        printf("| Can not open file |\n");
+        printf(" -------------------\n\n");
         return NULL;
     }
     int i = 0;
@@ -290,7 +290,9 @@ struct task **load(struct task *loaded_week[7],char *name) {
         loaded_week[i] = list;
         i++;
     }
-    printf("Data Was Loaded\n");
+    printf(" -----------------\n");
+    printf("| Data Was Loaded |\n");
+    printf(" -----------------\n\n");
     fclose(fpload);
     return loaded_week;
 }
@@ -308,23 +310,35 @@ void delete_node(struct task *week[],struct task *deleted,int day){
 void delete(struct task *week[]){
     int day;
     char name[50];
-    printf("Enter the day of the task you want to delete\n ");
+    printf(" ----------------------------------------------\n");
+    printf("| Enter the day of the task you want to delete |\n");
+    printf(" ----------------------------------------------\n");
     scanf("%d",&day);
-    printf("Enter the name of the task you want to delete\n");
+    printf(" -----------------------------------------------\n");
+    printf("| Enter the name of the task you want to delete |\n");
+    printf(" -----------------------------------------------\n");
     scanf("%s",name);
     struct task *current=week[day]->next;
     if(week[day]->next!=NULL) {
         while (current != NULL) {
             if (strncmp(current->taskName, name, strlen(name)) == 0) {
                 delete_node(week, current, day);
-                printf("Task was deleted\n");
+                printf(" ------------------\n");
+                printf("| Task was deleted |\n");
+                printf(" ------------------\n\n");
+
                 return;
             }
             current=current->next;
         }
-        printf("This task does not exist in this day\n");
+        printf(" --------------------------------------\n");
+        printf("| This task does not exist in this day |\n");
+        printf(" --------------------------------------\n\n");
+
     }else {
-        printf("No task exists in this day\n");
+        printf(" ------------------------------\n");
+        printf("| There is no task in this day |\n");
+        printf(" ------------------------------\n\n");
     }
 }
 
@@ -334,12 +348,20 @@ void modify_node(struct task *week[],struct task *new_task,int day){
         current=current->next;
     }
     struct task *modified=new_task;
-    printf("Enter the new information\n");
-    printf("Enter the name of the task\n");
+    printf(" ------------------------------------------\n");
+    printf("| Task found ||| Enter the new information |\n");
+    printf(" ------------------------------------------\n\n");
+    printf(" ----------------------------\n");
+    printf("| Enter the name of the task |\n");
+    printf(" ----------------------------\n");
     scanf("%s",modified->taskName);
-    printf("Enter the start time of the task\n");
+    printf(" ----------------------------------\n");
+    printf("| Enter the start time of the task |\n");
+    printf(" ----------------------------------\n");
     scanf("%d",&modified->startTime);
-    printf("Enter the end time of the task\n");
+    printf(" --------------------------------\n");
+    printf("| Enter the end time of the task |\n");
+    printf(" --------------------------------\n");
     scanf("%d",&modified->endTime);
 
 }
@@ -362,9 +384,13 @@ struct task *theModify(struct task *week[]){
                 }
                 current = current->next;
             }
-            printf("This task does not exist in this day\n");
+            printf(" --------------------------------------\n");
+            printf("| This task does not exist in this day |\n");
+            printf(" --------------------------------------\n\n");
         }else{
-            printf("There is no task in this day\n");
+            printf(" ------------------------------\n");
+            printf("| There is no task in this day |\n");
+            printf(" ------------------------------\n\n");
         }
 }
 
@@ -397,7 +423,9 @@ void add_timeOrder(struct task *week[],struct task *new_task,int day){
 void search(struct task *week[]){
     int found=0;
         char name[50];
-        printf("Enter the name of the task\n");
+    printf(" ----------------------------\n");
+    printf("| Enter the name of the task |\n");
+    printf(" ----------------------------\n");
         scanf("%s",name);
         for(int i=0;i<7;i++){
             struct task *current=week[i]->next;
@@ -410,28 +438,39 @@ void search(struct task *week[]){
                 }
             }
         }if(found==0) {
-        printf("This task does not exist in this week\n");
+        printf(" ---------------------------------------\n");
+        printf("| This task does not exist in this week |\n");
+        printf(" ---------------------------------------\n\n");
     }
     }
 
 void showInstruction(){
-    printf("Here is a small guid to this calendar\n\n");
-    printf("NEW TASK lets you add new task to your weekly tasks\n");
-    printf("You need to enter day,name,start time and the end time of the task\n");
-    printf("DELETE lets you delete any of your tasks\n");
-    printf("You need to enter the day and the name of the task\n");
-    printf("SEARCH lets you find the days and the hours of a specific task\n");
-    printf("You need to enter the name of the task \n");
-    printf("MODIFY lets you change the name or the time of a task\n");
-    printf("You need to enter the name,start time and the end time of the task\n");
-    printf("SHOW TASK shows you all of the task in the week\n");
-    printf("SAVE lets you save the changes you have made to your weekly tasks\n");
-    printf("Remember to save changes before quiting the program\n");
-    printf("LOAD helps you load the file that was saved with your name\n");
-    printf("If you want to make any changes to your own weekly planner\n");
-    printf("please first choose load option\n");
-    printf("If you save changes to your file without loading it\n");
-    printf("The last data will be removed,BE CAREFUL!\n");
+    printf(" ----------------------------------------------------------------------\n");
+    printf("|                |||A SMALL GUID TO THIS CALENDAR|||                    |\n");
+    printf(" ----------------------------------------------------------------------\n");
+    printf("| NEW TASK->Lets you add new task to your weekly tasks.                 |\n");
+    printf("| You need to enter NAME,START TIME and END TIME of the task.           |\n");
+    printf(" ----------------------------------------------------------------------\n");
+    printf("| DELETE->Lets you delete any of your tasks.                            |\n");
+    printf("| You need to enter the DAY and the NAME of the task.                   |\n");
+    printf(" ----------------------------------------------------------------------\n");
+    printf("| SEARCH->Lets you find the day(s) and the time of a specific task.     |\n");
+    printf("| You need to enter the NAME of the task.                               |\n");
+    printf(" ----------------------------------------------------------------------\n");
+    printf("| MODIFY->Lets you change the name or the time of a task.               |\n");
+    printf("| You need to enter the NAME,START TIME and END TIME of the task.       |\n");
+    printf(" ----------------------------------------------------------------------\n");
+    printf("| SHOW TASK->Shows you all of the task in the week.                     |\n");
+    printf(" ----------------------------------------------------------------------\n");
+    printf("| SAVE->Lets you save the changes you have made to your weekly tasks.   |\n");
+    printf("| !!! Remember to save changes before quiting the program !!!           |\n");
+    printf(" ----------------------------------------------------------------------\n");
+    printf("| LOAD->Helps you load the file that was saved with your name.          |\n");
+    printf("| If you want to make any changes to your own weekly planner            |\n");
+    printf("| please first choose load option.                                      |\n");
+    printf("| !!! If you save the changes to your file without loading it,          |\n");
+    printf("| the last data will be removed,BE CAREFUL !!!                          |\n");
+    printf(" ----------------------------------------------------------------------\n");
 }
 
 
