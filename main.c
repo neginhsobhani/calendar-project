@@ -3,6 +3,7 @@
 #include <string.h>
 #include <conio.h>
 #include <ctype.h>
+#include <windows.h>
 
 struct task {
     int isHead;
@@ -69,7 +70,17 @@ int main() {
     printf("       Welcome %s           \n",userName);
     printf(" -----------------------------\n");
     while (1) {
-        printf("[1] Instruction\n[2] new task\n[3] delete task\n[4] search\n[5] modify\n[6] show task\n[7] save\n[8] load\n[9] quit\n");
+        printf("\n");
+        printf("< [1]....Instruction >\n");
+        printf("< [2]....New task    >\n");
+        printf("< [3]....Delete task >\n");
+        printf("< [4]....Search      >\n");
+        printf("< [5]....Modify      >\n");
+        printf("< [6]....Show task   >\n");
+        printf("< [7]....Save        >\n");
+        printf("< [8]....Load        >\n");
+        printf("< [9]....Quit        >\n");
+
         char key = getch();
         getch();if(key == '1'){
             showInstruction();
@@ -88,9 +99,9 @@ int main() {
         } else if (key == '8') {
             week = load(week,userName);
         }else if(key == '9') {
-            printf(" --------------------------\n");
+            printf(" -------------------------\n");
             printf("       Bye %s           \n",userName);
-            printf(" --------------------------\n");
+            printf(" -------------------------\n");
             break;
         }
     }
@@ -185,37 +196,44 @@ int checkTaskName(struct task *week[], int day, struct task *new_task) {
 }
 
 void showTask(struct task *week[]) {
-    printf("0 (Saturday):");
+    printf(" ----------------\n");
+    printf("| 0 (Saturday):  |");
     showDay(week, 0);
     printf("\n");
-    printf("1 (Sunday): ");
+    printf(" ----------------\n");
+    printf("| 1 (Sunday):    |");
     showDay(week, 1);
     printf("\n");
-    printf("2 (Monday): ");
+    printf(" ----------------\n");
+    printf("| 2 (Monday):    |");
     showDay(week, 2);
     printf("\n");
-    printf("3 (Tuesday): ");
+    printf(" ----------------\n");
+    printf("| 3 (Tuesday):   |");
     showDay(week, 3);
     printf("\n");
-    printf("4 (Wednesday): ");
+    printf(" ----------------\n");
+    printf("| 4 (Wednesday): |");
     showDay(week, 4);
     printf("\n");
-    printf("5 (Thursday): ");
+    printf(" ----------------\n");
+    printf("| 5 (Thursday):  |");
     showDay(week, 5);
     printf("\n");
-    printf("6 (Friday): ");
+    printf(" ----------------\n");
+    printf("| 6 (Friday):    |");
     showDay(week, 6);
     printf("\n");
-
+    printf(" ----------------\n");
 
 }
 
 void showDay(struct task *week[], int day) { //shows each task
     struct task *current = week[day]->next;
     while (current != NULL) {
-        printf("%s (From: %d,To: %d)", current->taskName, current->startTime, current->endTime);
+        printf(" \"%s\" (From: %d,To: %d)", current->taskName, current->startTime, current->endTime);
         if(current->next!=NULL){
-            printf(" -> ");
+            printf(" ->");
         }
         current = current->next;
     }
@@ -369,9 +387,15 @@ void modify_node(struct task *week[],struct task *new_task,int day){
 struct task *theModify(struct task *week[]){
     int day;
     char name[50];
-    printf("Enter the DAY of the task you want to modify\n");
+    printf(" ----------------------------------------------\n");
+    printf("| Enter the DAY of the task you want to modify |\n");
+    printf(" ----------------------------------------------\n");
+
     scanf("%d",&day);
-    printf("Enter the NAME of the task you want to modify\n");
+    printf(" -----------------------------------------------\n");
+    printf("| Enter the NAME of the task you want to modify |\n");
+    printf(" -----------------------------------------------\n");
+
     scanf("%s",name);
     struct task *current=week[day]->next;
         if(week[day]->next!=NULL){
@@ -379,7 +403,11 @@ struct task *theModify(struct task *week[]){
                 if (strncmp(current->taskName, name, strlen(name)) == 0) {
                     struct task *new_task = current;
                     modify_node(week, new_task, day);
-                    printf("Task was modified\n");
+                    printf(" -------------------\n");
+                    printf("| Task was modified |\n");
+                    printf(" -------------------\n\n");
+
+
                     return NULL;
                 }
                 current = current->next;
@@ -432,7 +460,34 @@ void search(struct task *week[]){
             if(week[i]->next!=NULL){
                 while(current!=NULL){
                     if(strcmp(name,current->taskName)==0){
-                        printf("\nDay: %d-From %d,To %d\n",i,current->startTime,current->endTime);
+                        printf("*");
+                        switch(i){
+                            case 0:
+                                printf(" Saturday");
+                                break;
+                            case 1:
+                                printf(" Sunday");
+                                break;
+                            case 2:
+                                printf(" Monday");
+                                break;
+                            case 3:
+                                printf(" Tuesday");
+                                break;
+                            case 4:
+                                printf(" Wednesday");
+                                break;
+                            case 5:
+                                printf(" Thursday");
+                                break;
+                            case 6:
+                                printf(" Friday");
+                                break;
+                            default:
+                                break;
+                        }
+                        printf(" -> ( From %d , To %d ) \n",current->startTime,current->endTime);
+                        printf(" -------------------------------\n");
                         found++;
                     }current=current->next;
                 }
